@@ -91,6 +91,7 @@ set(ZEPHYR_VERSION "${Zephyr_VERSION}")
 
 configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
 
+
 add_custom_target(
   doxygen
   COMMAND
@@ -103,6 +104,33 @@ set_target_properties(
   PROPERTIES
     ADDITIONAL_CLEAN_FILES "${DOXY_OUT}"
 )
+
+#-------------------------------------------------------------------------------
+# Doxygen (standalone)
+
+set(DOXY_ANALYSIS_OUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen-analysis)
+set(DOXYFILE_ANALYSIS_IN ${CMAKE_CURRENT_LIST_DIR}/zephyr-analysis.doxyfile.in)
+set(DOXYFILE_ANALYSIS_OUT ${CMAKE_CURRENT_BINARY_DIR}/zephyr-analysis.doxyfile)
+
+set(DOXYFILE_ANALYSIS_INPUTFILES_IN ${CMAKE_CURRENT_LIST_DIR}/zephyr-analysis.doxyinput.in)
+set(DOXYFILE_ANALYSIS_INPUTFILES_OUT ${CMAKE_CURRENT_BINARY_DIR}/zephyr-analysis.doxyinput)
+
+configure_file(${DOXYFILE_ANALYSIS_IN} ${DOXYFILE_ANALYSIS_OUT} @ONLY)
+configure_file(${DOXYFILE_ANALYSIS_INPUTFILES_IN} ${DOXYFILE_ANALYSIS_INPUTFILES_OUT} @ONLY)
+
+add_custom_target(
+  doxygen-analysis
+  COMMAND
+    ${DOXYGEN_EXECUTABLE} ${DOXYFILE_ANALYSIS_OUT}
+  COMMENT "Running Doxygen..."
+)
+
+set_target_properties(
+  doxygen-analysis
+  PROPERTIES
+    ADDITIONAL_CLEAN_FILES "${DOXY_OUT_ANALYSIS}"
+)
+
 
 #-------------------------------------------------------------------------------
 # devicetree
